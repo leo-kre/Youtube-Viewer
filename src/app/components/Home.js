@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import SearchBar from "./SearchBar";
 export default function Home() {
       return (
