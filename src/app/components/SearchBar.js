@@ -16,7 +16,7 @@ export default function SearchBar() {
 
             if (text != "") {
                   searchIcon = (
-                        <Link href={{ pathname: "/video", query: { id: "1234" } }}>
+                        <Link href={{ pathname: "/watch", query: { v: text.replace("https://www.youtube.com/watch?v=", "") } }}>
                               <Image src={magnifyingGlass} className="w-8 h-8 mx-1.5" alt="magnifyingGlass"></Image>
                         </Link>
                   );
