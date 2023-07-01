@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 import magnifyingGlass from "../../../public/magnifying-glass.svg";
+import Link from "next/link";
 
 export default function SearchBar() {
       const [searchValue, setSearchValue] = useState(null);
@@ -14,7 +15,11 @@ export default function SearchBar() {
             let text = searchValue.target.value;
 
             if (text != "") {
-                  searchIcon = <Image src={magnifyingGlass} className="w-8 h-8 mx-1.5" alt="magnifyingGlass"></Image>;
+                  searchIcon = (
+                        <Link href={{ pathname: "/video", query: { id: "1234" } }}>
+                              <Image src={magnifyingGlass} className="w-8 h-8 mx-1.5" alt="magnifyingGlass"></Image>
+                        </Link>
+                  );
             }
       }
 
