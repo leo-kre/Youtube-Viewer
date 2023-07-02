@@ -3,34 +3,39 @@
 const fs = require("fs");
 const ytdl = require("ytdl-core");
 
-import videoPage from "./page";
+const path = "./public/videos/";
+
+const deleteTimeInMinutes = 60;
 
 export default async function Request(id) {
       let url = "http://www.youtube.com/watch?v=" + id;
 
-      let path = "./public/videos/";
+      const stream = ytdl(url, { filter: (format) => format.hasAudio && format.hasVideo });
 
-      const stream = ytdl(url);
-
+      let fileName = "id-" + id + ".mp4";
       try {
-            if (fs.existsSync(path + "video.mp4")) {
-                  console.log("file exists");
+            if (fs.existsSync(path + fileName)) {
                   return;
             } else {
-                  stream.pipe(fs.createWriteStream(path + "video.mp4"));
+                  stream.pipe(fs.createWriteStream(path + fileName));
+
+                  stream.on("progress", (chunkLength, downloaded, total) => {
+                        let percentage = (downloaded / total) * 100;
+                  });
             }
       } catch (e) {}
 
-      let finished = false;
+      setTimeout(() => {
+            deleteVideo(id);
+      }, deleteTimeInMinutes * 60 * 1000);
+}
 
-      stream.on("readable", () => {
-            if (finished) {
-                  return;
+export async function deleteVideo(id) {
+      const file = path + "id-" + id + ".mp4";
+      try {
+            if (fs.existsSync(file)) {
+                  fs.unlinkSync(file);
+                  console.log("file deleted");
             }
-
-            console.log("finished");
-            videoPage.setVideoUrl(path + "video.mp4");
-
-            finished = true;
-      });
+      } catch (e) {}
 }
